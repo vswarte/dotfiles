@@ -47,6 +47,7 @@ return {
 
         if vim.g.neovide then
             vim.o.guifont = visuals.FONT
+            vim.g.neovide_scale_factor = 0.8
             vim.g.neovide_confirm_quit = true
 
             vim.g.neovide_cursor_trail_size = 0.8
@@ -68,11 +69,79 @@ return {
                 end,
                 opts = {
                     sidebar_filetypes = {
-                        NvimTree = { text = "<U+F15C> File Tree" },
-                        undotree = { text = "<U+F464> Revision History" },
-                        Outline = { text = "<U+F1B2> Structure Outline" },
+                        NvimTree = { text = "File Tree" },
+                        undotree = { text = "Revision History" },
+                        Outline = { text = "Structure Outline" },
                     },
                 },
+            },
+            {
+                "nvimdev/dashboard-nvim",
+                opts = {
+                    theme = "doom",
+                    config = {
+                        header = visuals.DASHBOARD_HEADER,
+                        shortcut = {},
+                        center = {
+                            {
+                                icon = visuals.FORMATTER_DASHBOARD_ICON(
+                                    visuals.ICON_FILES
+                                ),
+                                desc = "Files",
+                                action = "Telescope find_files",
+                                key = 'f',
+                            },
+                            {
+                                icon = visuals.FORMATTER_DASHBOARD_ICON(
+                                    visuals.ICON_PROJECTS
+                                ),
+                                desc = "Projects",
+                                action = "Telescope project",
+                                key = 'p',
+                            },
+                            {
+                                icon = visuals.FORMATTER_DASHBOARD_ICON(
+                                    visuals.ICON_HISTORY
+                                ),
+                                desc = "History",
+                                action = "Telescope oldfiles",
+                                key = 'h',
+                            },
+                            {
+                                icon = visuals.FORMATTER_DASHBOARD_ICON(
+                                    visuals.ICON_CONFIGURATION
+                                ),
+                                desc = "Configuration",
+                                action = "cd ~/.config/nvim | edit $MYVIMRC",
+                                key = 'c',
+                            },
+                        },
+                        footer = visuals.DASHBOARD_FOOTER,
+                    },
+                },
+                dependencies = { "nvim-tree/nvim-web-devicons" }
+            },
+            "lewis6991/gitsigns.nvim",
+            {
+                "lukas-reineke/indent-blankline.nvim",
+                main = "ibl",
+                opts = {
+                    exclude = {
+                        filetypes = {
+                            "help",
+                            "man",
+                            "checkhealth",
+                            "dashboard",
+                            "TelescopePrompt",
+                            "TelescopeResults",
+                        }
+                    },
+                    indent = { char = "┇" },
+                },
+            },
+            {
+                "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+                opts = true,
             },
         }
     end,

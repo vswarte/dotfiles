@@ -4,7 +4,6 @@ local modules = {
     require('navigation'),
     require('lsp'),
     require('ui'),
-    -- require('util'),
 }
 
 for i, module in pairs(modules) do
