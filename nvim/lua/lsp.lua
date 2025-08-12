@@ -1,6 +1,5 @@
 return {
     config = function()
-
     end,
     dependencies = function()
         return {
@@ -22,6 +21,7 @@ return {
                         ensure_installed = {
                             "lua_ls",
                             "eslint",
+                            "ts_ls",
                         }
                     })
                 end
@@ -32,6 +32,7 @@ return {
                     local lspconfig = require('lspconfig')
                     lspconfig.lua_ls.setup ({})
                     lspconfig.eslint.setup ({})
+                    lspconfig.ts_ls.setup ({})
                 end
             },
         }

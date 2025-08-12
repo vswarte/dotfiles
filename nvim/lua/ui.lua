@@ -1,38 +1,4 @@
-local visuals = {
-    -- General
-    FONT = "ProggyClean Nerd Font Mono:h12",
-
-    COLORSCHEME = "kanagawa",
-    LUALINE_THEME = "auto",
-    WINDOW_BORDER = { '▔', '▕', '▁', '▏', '🭽', '🭾', '🭿', '🭼' },
-
-    -- Icons
-    ICON_ERROR = "󰅚",
-    ICON_WARN =  "󰀪",
-    ICON_INFO =  "󰋽",
-    ICON_HINT =  "󰌶",
-
-    ICON_FILES = "󰈔",
-    ICON_PROJECTS = "",
-    ICON_HISTORY = "",
-    ICON_CONFIGURATION = "",
-
-    ICON_SEARCH = "",
-    ICON_CARET  = "",
-
-    -- Formatters
-    FORMATTER_TELESCOPE_ICON = function(i)
-        return " " .. i .. " "
-    end,
-
-    FORMATTER_DASHBOARD_ICON = function(i)
-        return i .. " "
-    end,
-
-    FORMATTER_LUALINE_DIAGNOSTICS_ICON = function(i)
-        return i .. " "
-    end,
-}
+local visuals = require('visuals');
 
 return {
     config = function()
@@ -121,6 +87,37 @@ return {
                 },
                 dependencies = { "nvim-tree/nvim-web-devicons" }
             },
+			{
+				"folke/noice.nvim",
+				event = "VeryLazy",
+				opts = {
+					views = {
+						cmdline_popup = {
+							border = {
+								style = "none",
+								padding = { 1, 1 },
+							},
+							win_options = {
+								winhighlight = "",
+							},
+						},
+						-- notify = { border = { style = "none" } },
+						-- popupmenu = { border = { style = "none" } },
+					},
+					lsp = {
+						override = {
+							["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+							["vim.lsp.util.stylize_markdown"] = true,
+							["cmp.entry.get_documentation"] = true,
+						},
+					},
+				},
+				dependencies = {
+					"MunifTanjim/nui.nvim",
+					"rcarriga/nvim-notify",
+				},
+			},
+
             "lewis6991/gitsigns.nvim",
             {
                 "lukas-reineke/indent-blankline.nvim",
@@ -147,5 +144,12 @@ return {
     end,
     after = function()
         vim.cmd("colorscheme " .. visuals.COLORSCHEME)
+
+        vim.keymap.set(
+            "",
+            "<Leader>l",
+            require("lsp_lines").toggle,
+            { desc = "Toggle lsp_lines" }
+        )
     end,
 }

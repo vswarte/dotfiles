@@ -1,3 +1,5 @@
+local visuals = require('visuals');
+
 return {
     config = function()
 
@@ -18,13 +20,61 @@ return {
                 },
             },
             "justinmk/vim-sneak",
-            {
-                'nvim-telescope/telescope.nvim', tag = '0.1.8',
-                dependencies = {
-                    "nvim-lua/plenary.nvim",
-                    "nvim-telescope/telescope-project.nvim",
-                }
-            },
+			{
+				'nvim-telescope/telescope.nvim', tag = '0.1.5',
+				dependencies = {
+					"folke/noice.nvim",
+					"nvim-lua/plenary.nvim",
+					"nvim-telescope/telescope-project.nvim",
+					"nvim-telescope/telescope-ui-select.nvim",
+				},
+				config = function()
+					local actions = require("telescope.actions")
+					local project_actions = require("telescope._extensions.project.actions")
+
+					require('telescope').setup({
+						extensions = {
+							project = {
+								base_dirs = {},
+								hidden_files = true,
+								order_by = "asc",
+								search_by = "title",
+								sync_with_nvim_tree = false,
+								on_project_selected = function(prompt_bufnr)
+									project_actions.change_working_directory(prompt_bufnr, false)
+
+									local telescope = require("telescope.builtin")
+									telescope.find_files()
+								end
+							},
+							["ui-select"] = {
+								require("telescope.themes").get_dropdown({})
+							}
+						},
+						defaults = {
+							borderchars = { "", "", "", "", "", "", "", "" },
+							sort_mru = true,
+							multi_icon = '',
+							entry_prefix = ' ',
+							prompt_prefix = visuals.FORMATTER_TELESCOPE_ICON(
+								visuals.ICON_SEARCH
+							),
+							selection_caret = visuals.FORMATTER_TELESCOPE_ICON(
+								visuals.ICON_CARET
+							),
+							mappings = {
+								i = {
+									["<esc>"] = actions.close,
+								},
+							},
+						},
+					})
+
+					local telescope = require("telescope");
+					telescope.load_extension("noice");
+					telescope.load_extension("ui-select");
+				end
+			},
         }
     end,
     after = function()
